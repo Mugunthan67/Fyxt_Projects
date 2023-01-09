@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fyxt/Routes/routepages.dart';
-
-
-
+import 'package:fyxt/Routing/screens.dart';
 
 void main() {
-  runApp( MainScreen());
+  runApp(MainScreen());
 }
 
 class MainScreen extends StatelessWidget {
@@ -14,10 +11,9 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-    debugShowCheckedModeBanner: false,
-    initialRoute: '/',
-    onGenerateRoute: RouteGenerator.generateRoute,
-
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
