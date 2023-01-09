@@ -20,15 +20,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_)=>LoginForm(title: '',));
       case '/forgot_password':
         return PageRouteAnimation(child:ForgotScreen(title: '',), settings:settings,direction: AxisDirection.left);
-        // return MaterialPageRoute(builder: (_) =>ForgotScrn());
-      // case '/Backto_login':
-      //   return MaterialPageRoute(builder: (_) =>Backtoscrn(Value: 'value',));
-      // case '/my_log':
-      //   return MaterialPageRoute(builder: (_) =>MyLogn(Value: 'value',));
-      // case '/job_rq':
-      //   return MaterialPageRoute(builder: (_) =>JobActy(Value: 'value',));
-      // case '/personal_profile':
-      //   return MaterialPageRoute(builder: (_) =>PersonalDetail(Value: 'value',));
+       
       default:
         return MaterialPageRoute(builder: (_)=>LoginForm(title: '',)); 
     }
