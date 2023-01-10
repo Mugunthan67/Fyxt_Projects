@@ -3,6 +3,7 @@ import 'package:fyxt/Login/backto_loginscreen.dart';
 import 'package:fyxt/Login/forgot_screen.dart';
 import 'package:fyxt/Login/login_screen.dart';
 import 'package:fyxt/Routing/routeanimation.dart';
+import 'package:fyxt/Sample/sample_screen.dart';
 
 class RouteGenerator {
   //static get arguments => null;
@@ -30,6 +31,9 @@ class RouteGenerator {
             builder: (_) => BacktoScreen(
                   Value: '',
                 ));
+      case '/teams':
+        // return PageRouteAnimation(child:LoginForm(), settings:settings,direction: AxisDirection.right);
+        return MaterialPageRoute(builder: (_) => TeamScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => LoginScreen(

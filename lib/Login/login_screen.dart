@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fyxt/Services/api_integration.dart';
 
 import '../Alert/alert_dialog.dart';
+import '../Models/loginscreen_model.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.title});
@@ -12,11 +14,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  late LoginRequestModel loginRequestModel;
   bool value = false;
-  // final allChecked = CheckBoxModal(title:'Remember me');
-  // final checkBoxList = [
-  //   CheckBoxModal(title:'checkBox 1')
-  // ];
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
@@ -36,10 +35,13 @@ class _LoginScreenState extends State<LoginScreen> {
     if (value == "") {
       print("Step 2");
       await AlertDialogs.yesCancelDialog(context, "yes", "Enter the email");
-    } else if (!regex.hasMatch(value!)) {
-      await AlertDialogs.yesCancelDialog(
-          context, "yes", "Enter the valid email");
     }
+    // else if (!regex.hasMatch(value!))
+    // {
+    //   await AlertDialogs.yesCancelDialog(
+    //       context, "yes", "Enter the valid email");
+    // }
+
     return false;
   }
 
@@ -80,30 +82,34 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontFamily: 'Noto Sans'),
                       ),
                       SizedBox(height: 15),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        width: MediaQuery.of(context).size.width * 0.75,
-                        child: TextFormField(
-                            controller: _emailController,
-                            //onSaved: (input) => loginRequestModel.email,
-                            // onSaved: (input)=> requestModel.email = input,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(vertical: 1),
-                              filled: true,
-                              fillColor: Colors.white,
-                              hintStyle: TextStyle(
-                                  color: Color.fromRGBO(118, 128, 146, 1),
-                                  fontSize: 12),
-                              hintText: "Username",
-                            )),
+                      Form(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          width: MediaQuery.of(context).size.width * 0.75,
+                          child: TextFormField(
+                              controller: _emailController,
+                              //onSaved: (input) => loginRequestModel.email,
+                              // onSaved: (input)=> requestModel.email = input,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                contentPadding:
+                                    EdgeInsets.symmetric(vertical: 1),
+                                filled: true,
+                                fillColor: Colors.white,
+                                hintStyle: TextStyle(
+                                    color: Color.fromRGBO(118, 128, 146, 1),
+                                    fontSize: 12),
+                                hintText: "Username",
+                              )),
+                        ),
                       ),
                       SizedBox(height: 20),
                       Container(
                         height: MediaQuery.of(context).size.height * 0.06,
                         width: MediaQuery.of(context).size.width * 0.75,
                         child: TextFormField(
+                            obscureText: true,
                             controller: _passwordController,
                             //onSaved: (input) => loginRequestModel.email,
                             // onSaved: (input)=> requestModel.email = input,
@@ -154,14 +160,35 @@ class _LoginScreenState extends State<LoginScreen> {
                               backgroundColor: Color.fromRGBO(245, 86, 0, 1),
                               minimumSize: Size(270, 40)),
                           onPressed: () async {
-                            final action = await AlertDialogs.yesCancelDialog(
-                                context, title, 'Please enter email');
-                            if (action == DialogsAction.ok) {
-                              setState(() {
-                                tappedYes = true;
-                              });
-                            }
+                            await EmailValidator(
+                                _emailController.text, context);
+                            ApiIntergration apiIntergration =
+                                new ApiIntergration();
+                            apiIntergration
+                                .login(loginRequestModel =
+                                    new LoginRequestModel(
+                                        email: _emailController.text,
+                                        password: _passwordController.text,
+                                        passowrd: ''))
+                                .then((value) {
+                              if (value != null) {
+                                setState(() {
+                                  print('Not Empty');
+                                });
+                                if (value.token.isNotEmpty) {
+                                  Navigator.of(context).pushNamed('/teams');
+                                }
+                              }
+                            });
                           },
+                          //   final action = await AlertDialogs.yesCancelDialog(
+                          //       context, title, 'Please enter email');
+                          //   if (action == DialogsAction.ok) {
+                          //     setState(() {
+                          //       tappedYes = true;
+                          //     });
+                          //   }
+                          // },
                           child: Text(
                             "Log in",
                             style: TextStyle(color: Colors.white, fontSize: 12),

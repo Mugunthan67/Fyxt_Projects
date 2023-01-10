@@ -131,7 +131,9 @@ class _ForgotScreenState extends State<ForgotScreen> {
                               backgroundColor: Color.fromRGBO(245, 86, 0, 1),
                               minimumSize: Size(270, 40)),
                           onPressed: () async {
-                            Navigator.of(context).pushNamed('/backtologin');
+                            await EmailValidator(
+                                _emailController.text, context);
+                            //Navigator.of(context).pushNamed('/backtologin');
                             //  final action = await AlertDialogs.yesCancelDialog(context, title, 'Please enter email');
                           },
                           child: Text(
