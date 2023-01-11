@@ -22,6 +22,5 @@ class Header {
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': '*',
     'Authorization': '$token'
-    
   };
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyxt/Login/backto_loginscreen.dart';
+import 'package:fyxt/Login/environment_screen.dart';
 import 'package:fyxt/Login/forgot_screen.dart';
 import 'package:fyxt/Login/login_screen.dart';
 import 'package:fyxt/Routing/routeanimation.dart';
@@ -34,6 +35,13 @@ class RouteGenerator {
       case '/teams':
         // return PageRouteAnimation(child:LoginForm(), settings:settings,direction: AxisDirection.right);
         return MaterialPageRoute(builder: (_) => TeamScreen());
+
+      case '/environment':
+        // return PageRouteAnimation(child:LoginForm(), settings:settings,direction: AxisDirection.right);
+        return MaterialPageRoute(
+            builder: (_) => EnvironmentScreen(
+                  title: '',
+                ));
       default:
         return MaterialPageRoute(
             builder: (_) => LoginScreen(

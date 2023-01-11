@@ -32,15 +32,21 @@ class _LoginScreenState extends State<LoginScreen> {
         r"{0,253}[a-zA-Z0-9])?)*$";
     RegExp regex = RegExp(pattern);
 
-    if (value == "") {
+    if (value!.isEmpty) {
       print("Step 2");
       await AlertDialogs.yesCancelDialog(context, "yes", "Enter the email");
+    } else if (value.isNotEmpty) {
+      print("Step3");
+      await AlertDialogs.yesCancelDialog(context, "yes", "Enter the passsword");
+    } else if (value != regex.hasMatch(value)) {
+      print("step4");
+      await AlertDialogs.yesCancelDialog(
+          context, "yes", "Enter the Valid email");
+    } else if (value != value) {
+      print("step5");
+      await AlertDialogs.yesCancelDialog(
+          context, "yes", "Unable to login with provide crenditials");
     }
-    // else if (!regex.hasMatch(value!))
-    // {
-    //   await AlertDialogs.yesCancelDialog(
-    //       context, "yes", "Enter the valid email");
-    // }
 
     return false;
   }
@@ -66,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: EdgeInsets.all(25),
                   child: Column(
                     children: [
-                      SizedBox(height: 40),
+                      SizedBox(height: 90),
                       new Image.asset(
                         "assets/images/splashlogo.png",
                         height: 76,
@@ -74,41 +80,45 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        "Welcome Back!",
+                        "Welcome back!",
                         style: TextStyle(
                             color: Colors.white,
-                            fontSize: 25,
+                            fontSize: 27,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Noto Sans'),
                       ),
                       SizedBox(height: 15),
                       Form(
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          width: MediaQuery.of(context).size.width * 0.75,
+                          height: MediaQuery.of(context).size.height * 0.05,
+                          width: MediaQuery.of(context).size.width * 0.85,
                           child: TextFormField(
+                              cursorColor: Color.fromARGB(25, 44, 73, 1),
                               controller: _emailController,
                               //onSaved: (input) => loginRequestModel.email,
                               // onSaved: (input)=> requestModel.email = input,
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none),
                                 contentPadding:
                                     EdgeInsets.symmetric(vertical: 1),
                                 filled: true,
                                 fillColor: Colors.white,
                                 hintStyle: TextStyle(
                                     color: Color.fromRGBO(118, 128, 146, 1),
-                                    fontSize: 12),
+                                    fontSize: 16),
                                 hintText: "Username",
                               )),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 23),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        width: MediaQuery.of(context).size.width * 0.75,
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        width: MediaQuery.of(context).size.width * 0.85,
                         child: TextFormField(
+                            cursorColor: Color.fromARGB(25, 44, 73, 1),
                             obscureText: true,
                             controller: _passwordController,
                             //onSaved: (input) => loginRequestModel.email,
@@ -116,23 +126,26 @@ class _LoginScreenState extends State<LoginScreen> {
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none),
+                              //focusedBorder: InputBorder.none,
                               contentPadding: EdgeInsets.symmetric(vertical: 1),
                               filled: true,
                               fillColor: Colors.white,
                               hintStyle: TextStyle(
                                   color: Color.fromRGBO(118, 128, 146, 1),
-                                  fontSize: 12),
+                                  fontSize: 16),
                               hintText: "Password",
                             )),
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        height: 40,
-                        width: 350,
+                      ListTileTheme(
+                        contentPadding: EdgeInsets.only(left: 2),
                         child: CheckboxListTile(
-                          side: BorderSide(color: Colors.white),
+                          side: MaterialStateBorderSide.resolveWith((states) =>
+                              BorderSide(width: 2.0, color: Colors.white)),
                           activeColor: Colors.white,
                           checkColor: Colors.black,
                           controlAffinity: ListTileControlAffinity.leading,
@@ -142,76 +155,98 @@ class _LoginScreenState extends State<LoginScreen> {
                               this.value = value!;
                             });
                           },
-                          title: Text(
-                            "Remember me",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Noto Sans",
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal),
+                          title: Transform.translate(
+                            offset: Offset(-20, 0),
+                            child: RichText(
+                                text: TextSpan(
+                                    text: "Remember me",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Noto Sans',
+                                        fontSize: 16))),
                           ),
+
+                          // Text(
+                          //   "Remember me",
+                          //   style: TextStyle(
+                          //       color: Colors.white,
+                          //       fontFamily: "Noto Sans",
+                          //       fontSize: 18,
+                          //       fontWeight: FontWeight.normal),
+                          // ),
                         ),
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 10,
                       ),
-                      TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Color.fromRGBO(245, 86, 0, 1),
-                              minimumSize: Size(270, 40)),
-                          onPressed: () async {
-                            await EmailValidator(
-                                _emailController.text, context);
-                            ApiIntergration apiIntergration =
-                                new ApiIntergration();
-                            apiIntergration
-                                .login(loginRequestModel =
-                                    new LoginRequestModel(
-                                        email: _emailController.text,
-                                        password: _passwordController.text,
-                                        passowrd: ''))
-                                .then((value) {
-                              if (value != null) {
-                                setState(() {
-                                  print('Not Empty');
-                                });
-                                if (value.token.isNotEmpty) {
-                                  Navigator.of(context).pushNamed('/teams');
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        child: TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: Color.fromRGBO(245, 86, 0, 1),
+                                minimumSize: Size(270, 40)),
+                            onPressed: () async {
+                              await EmailValidator(
+                                  _emailController.text, context);
+                              ApiIntergration apiIntergration =
+                                  new ApiIntergration();
+                              apiIntergration
+                                  .login(loginRequestModel =
+                                      new LoginRequestModel(
+                                          email: _emailController.text,
+                                          password: _passwordController.text,
+                                          passowrd: ''))
+                                  .then((value) {
+                                if (value != null) {
+                                  setState(() {
+                                    print('Not Empty');
+                                  });
+                                  if (value.token.isNotEmpty) {
+                                    Navigator.of(context)
+                                        .pushNamed('/environment');
+                                  }
                                 }
-                              }
-                            });
-                          },
-                          //   final action = await AlertDialogs.yesCancelDialog(
-                          //       context, title, 'Please enter email');
-                          //   if (action == DialogsAction.ok) {
-                          //     setState(() {
-                          //       tappedYes = true;
-                          //     });
-                          //   }
-                          // },
-                          child: Text(
-                            "Log in",
-                            style: TextStyle(color: Colors.white, fontSize: 12),
-                          )),
-                      SizedBox(height: 10),
+                              });
+                            },
+                            //   final action = await AlertDialogs.yesCancelDialog(
+                            //       context, title, 'Please enter email');
+                            //   if (action == DialogsAction.ok) {
+                            //     setState(() {
+                            //       tappedYes = true;
+                            //     });
+                            //   }
+                            // },
+                            child: Text(
+                              "Log in",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
+                            )),
+                      ),
+                      SizedBox(height: 5),
                       Text(
                         "or",
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 15,
                       ),
-                      TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Color.fromRGBO(245, 86, 0, 1),
-                              minimumSize: Size(270, 40)),
-                          onPressed: () async {},
-                          child: Text(
-                            "Log In With SSO",
-                            style: TextStyle(color: Colors.white, fontSize: 12),
-                          )),
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        child: TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: Color.fromRGBO(245, 86, 0, 1),
+                                minimumSize: Size(270, 40)),
+                            onPressed: () async {},
+                            child: Text(
+                              "Log In With SSO",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
+                            )),
+                      ),
                       SizedBox(
-                        height: 130,
+                        height: 106,
                       ),
                       TextButton(
                           style: ButtonStyle(
@@ -224,9 +259,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             "Forgot Password?",
                             style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontFamily: 'Noto Sans',
+                                fontWeight: FontWeight.normal),
                           )),
                     ],
                   ),

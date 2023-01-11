@@ -77,13 +77,13 @@ class _ForgotScreenState extends State<ForgotScreen> {
                   padding: EdgeInsets.all(25),
                   child: Column(
                     children: [
-                      SizedBox(height: 80),
+                      SizedBox(height: 95),
                       new Image.asset(
                         "assets/images/splashlogo.png",
                         height: 76,
                         width: 106,
                       ),
-                      SizedBox(height: 50),
+                      SizedBox(height: 105),
                       Text(
                         "Forgot Password?",
                         style: TextStyle(
@@ -99,47 +99,55 @@ class _ForgotScreenState extends State<ForgotScreen> {
                             "a link to reset your password",
                         style: TextStyle(
                           color: Color.fromRGBO(118, 128, 146, 1),
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
                       SizedBox(height: 30),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        width: MediaQuery.of(context).size.width * 0.78,
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        width: MediaQuery.of(context).size.width * 0.80,
                         child: TextFormField(
+                            cursorColor: Color.fromARGB(25, 44, 73, 1),
                             controller: _emailController,
                             //onSaved: (input) => loginRequestModel.email,
                             // onSaved: (input)=> requestModel.email = input,
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none),
                               contentPadding: EdgeInsets.symmetric(vertical: 1),
                               filled: true,
                               fillColor: Colors.white,
                               hintStyle: TextStyle(
                                   color: Color.fromRGBO(118, 128, 146, 1),
-                                  fontSize: 12),
+                                  fontSize: 18),
                               hintText: "Email",
                             )),
                       ),
                       SizedBox(
                         height: 15,
                       ),
-                      TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Color.fromRGBO(245, 86, 0, 1),
-                              minimumSize: Size(270, 40)),
-                          onPressed: () async {
-                            await EmailValidator(
-                                _emailController.text, context);
-                            //Navigator.of(context).pushNamed('/backtologin');
-                            //  final action = await AlertDialogs.yesCancelDialog(context, title, 'Please enter email');
-                          },
-                          child: Text(
-                            "Submit",
-                            style: TextStyle(color: Colors.white, fontSize: 12),
-                          )),
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        width: MediaQuery.of(context).size.width * 0.80,
+                        child: TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: Color.fromRGBO(245, 86, 0, 1),
+                                minimumSize: Size(270, 40)),
+                            onPressed: () async {
+                              await EmailValidator(
+                                  _emailController.text, context);
+                              //Navigator.of(context).pushNamed('/backtologin');
+                              //  final action = await AlertDialogs.yesCancelDialog(context, title, 'Please enter email');
+                            },
+                            child: Text(
+                              "Submit",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 15),
+                            )),
+                      )
                     ],
                   ),
                 ),
