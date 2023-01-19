@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fyxt/Login/backto_loginscreen.dart';
 
 import '../Alert/alert_dialog.dart';
+import 'common_widget.dart';
 
 class EnvironmentScreen extends StatefulWidget {
   const EnvironmentScreen({super.key, required this.title});
@@ -21,12 +22,7 @@ class _EnvironmentScreenState extends State<EnvironmentScreen> {
             resizeToAvoidBottomInset: false,
             extendBodyBehindAppBar: true,
             body: Stack(children: <Widget>[
-              new Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/background.png"),
-                        fit: BoxFit.cover)),
-              ),
+                BackgroungImage(),
               new Center(
                   child: Padding(
                       padding: EdgeInsets.all(25),
@@ -68,8 +64,17 @@ class _EnvironmentScreenState extends State<EnvironmentScreen> {
                                   margin: EdgeInsets.symmetric(horizontal: 15),
                                   width: 160,
                                   decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.orange),
+
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.white,
+
+                                    //  border:
+                                  ),
+                                  child: Text(
+                                    textAlign: TextAlign.center,
+                                    'Krishna',
+                                    style: TextStyle(color: Colors.black),
                                   ),
                                 ),
                                 Container(

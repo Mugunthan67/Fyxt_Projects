@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'common_widget.dart';
+
 class SuccessScreen extends StatefulWidget {
   const SuccessScreen({Key? key}) : super(key: key);
 
@@ -15,12 +17,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
         home: Scaffold(
           body: Stack(
             children: <Widget>[
-              new Container(
-                decoration: new BoxDecoration(
-                    image: new DecorationImage(
-                  image: new ExactAssetImage("assets/images/background.png"),
-                )),
-              ),
+              BackgroungImage(),
               new Center(
                 child: Padding(
                   padding: EdgeInsets.all(25),

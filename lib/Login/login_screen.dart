@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fyxt/Services/api_integration.dart';
-
+import 'package:http/http.dart' as http;
 import '../Alert/alert_dialog.dart';
+import '../Constants/api_constant.dart';
 import '../Models/loginscreen_model.dart';
+import 'common_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.title});
@@ -24,31 +28,83 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
-  Future<bool> EmailValidator(String? value, context) async {
-    print("Step 1");
+  // Future<bool?> EmailValidator(String? value, context) async {
+  //   print("Step 1");
+  //   String pattern =
+  //       r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+  //       r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+  //       r"{0,253}[a-zA-Z0-9])?)*$";
+  //   RegExp regex = RegExp(pattern);
+
+  //   if (_emailController.text.isEmpty) {
+  //     print("Step 2");
+  //     await AlertDialogs.yesCancelDialog(context, "yes", "Enter the email");
+  //   }
+  //   // } else if (value.isNotEmpty) {
+  //   //   print("Step3");
+  //   //   await AlertDialogs.yesCancelDialog(context, "yes", "Enter the passsword");
+  //   // }
+  //    else if (_passwordController.text.isEmpty) {
+  //     print("step3");
+  //     await AlertDialogs.yesCancelDialog(
+  //         context, "yes", "Enter the  Password");
+  //    }
+  //     else if(value !=regex)
+  //      {
+  //      print("step4");
+
+  //    await AlertDialogs.yesCancelDialog(
+  //        context, "yes", "cgf");
+  //    }
+
+  //   //  else if(_emailController.text != _passwordController.text) {
+  //   //    print("step5");
+  //   //   await AlertDialogs.yesCancelDialog(
+  //   //       context, "yes", "Unable to login with provide credentials ");
+  //   //  }
+
+  //   // } else if (value != value) {
+  //   //   print("step5");
+  //   //   await AlertDialogs.yesCancelDialog(
+  //   //       context, "yes", "Unable to login with provide crenditials");
+  //   // }
+
+  //   return false;
+  // }
+  Future<String?> validateCredentials(String email, String password) async {
     String pattern =
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
         r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
         r"{0,253}[a-zA-Z0-9])?)*$";
     RegExp regex = RegExp(pattern);
 
-    if (value!.isEmpty) {
-      print("Step 2");
+    // Make a POST request to your server to validate the email and password
+    var response = await http.post(Uri.parse(Constants.baseUrl),
+        body: {'email': email, 'password': password});
+
+    // Parse the JSON response
+    var data = jsonDecode(response.body);
+    if (_emailController.text.isEmpty) {
+      print("Step 1");
       await AlertDialogs.yesCancelDialog(context, "yes", "Enter the email");
-    } else if (value.isNotEmpty) {
-      print("Step3");
-      await AlertDialogs.yesCancelDialog(context, "yes", "Enter the passsword");
-    } else if (value != regex.hasMatch(value)) {
-      print("step4");
-      await AlertDialogs.yesCancelDialog(
-          context, "yes", "Enter the Valid email");
-    } else if (value != value) {
-      print("step5");
-      await AlertDialogs.yesCancelDialog(
-          context, "yes", "Unable to login with provide crenditials");
+    }
+    // } else if (value.isNotEmpty) {
+    //   print("Step3");
+    //   await AlertDialogs.yesCancelDialog(context, "yes", "Enter the passsword");
+    // }
+    else if (_passwordController.text.isEmpty) {
+      print("step2");
+      await AlertDialogs.yesCancelDialog(context, "yes", "Enter the  Password");
     }
 
-    return false;
+    //Check if the validation was successful
+    // else if (data['status'] != 'success') {
+    //   return 'Validation successful';
+    // }
+    else {
+      await AlertDialogs.yesCancelDialog(context, title, '${data['error']}');
+      return ' ${data['error']}';
+    }
   }
 
   String title = 'AlertDialog';
@@ -61,24 +117,19 @@ class _LoginScreenState extends State<LoginScreen> {
         home: Scaffold(
             resizeToAvoidBottomInset: false,
             body: Stack(children: <Widget>[
-              new Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/background.png"),
-                        fit: BoxFit.cover)),
-              ),
+               BackgroungImage(),
               new Center(
                 child: Padding(
                   padding: EdgeInsets.all(25),
                   child: Column(
                     children: [
-                      SizedBox(height: 90),
+                      SizedBox(height: 70),
                       new Image.asset(
                         "assets/images/splashlogo.png",
                         height: 76,
                         width: 106,
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 5),
                       Text(
                         "Welcome back!",
                         style: TextStyle(
@@ -87,11 +138,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Noto Sans'),
                       ),
-                      SizedBox(height: 15),
+                      SizedBox(height: 55),
                       Form(
                         child: Container(
-                          height: MediaQuery.of(context).size.height * 0.05,
-                          width: MediaQuery.of(context).size.width * 0.85,
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          width: MediaQuery.of(context).size.width * 0.80,
                           child: TextFormField(
                               cursorColor: Color.fromARGB(25, 44, 73, 1),
                               controller: _emailController,
@@ -113,10 +164,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               )),
                         ),
                       ),
-                      SizedBox(height: 23),
+                      SizedBox(height: 20),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        width: MediaQuery.of(context).size.width * 0.85,
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width * 0.80,
                         child: TextFormField(
                             cursorColor: Color.fromARGB(25, 44, 73, 1),
                             obscureText: true,
@@ -139,10 +190,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             )),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
                       ListTileTheme(
-                        contentPadding: EdgeInsets.only(left: 2),
+                        contentPadding: EdgeInsets.only(left: 7),
                         child: CheckboxListTile(
                           side: MaterialStateBorderSide.resolveWith((states) =>
                               BorderSide(width: 2.0, color: Colors.white)),
@@ -177,18 +228,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 8,
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        width: MediaQuery.of(context).size.width * 0.85,
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width * 0.80,
                         child: TextButton(
                             style: TextButton.styleFrom(
                                 backgroundColor: Color.fromRGBO(245, 86, 0, 1),
                                 minimumSize: Size(270, 40)),
                             onPressed: () async {
-                              await EmailValidator(
-                                  _emailController.text, context);
+                              await validateCredentials(_emailController.text,
+                                  _passwordController.text);
                               ApiIntergration apiIntergration =
                                   new ApiIntergration();
                               apiIntergration
@@ -223,17 +274,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                   TextStyle(color: Colors.white, fontSize: 15),
                             )),
                       ),
-                      SizedBox(height: 5),
+                      SizedBox(height: 6),
                       Text(
-                        "or",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        "Or",
+                        style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                       SizedBox(
                         height: 15,
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        width: MediaQuery.of(context).size.width * 0.85,
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width * 0.80,
                         child: TextButton(
                             style: TextButton.styleFrom(
                                 backgroundColor: Color.fromRGBO(245, 86, 0, 1),
@@ -246,7 +297,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             )),
                       ),
                       SizedBox(
-                        height: 106,
+                        height: 105,
                       ),
                       TextButton(
                           style: ButtonStyle(

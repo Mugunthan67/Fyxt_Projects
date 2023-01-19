@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fyxt/Login/backto_loginscreen.dart';
+import 'package:fyxt/Models/loginscreen_model.dart';
+import 'package:fyxt/Services/api_integration.dart';
 
 import '../Alert/alert_dialog.dart';
+import 'common_widget.dart';
 
 class ForgotScreen extends StatefulWidget {
   const ForgotScreen({super.key, required this.title});
@@ -13,6 +16,7 @@ class ForgotScreen extends StatefulWidget {
 }
 
 class _ForgotScreenState extends State<ForgotScreen> {
+  late LoginRequestModel loginRequestModel;
   bool value = false;
   String title = 'AlertDialog';
   // final allChecked = CheckBoxModal(title:'Remember me');
@@ -66,12 +70,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
               elevation: 0,
             ),
             body: Stack(children: <Widget>[
-              new Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/background.png"),
-                        fit: BoxFit.cover)),
-              ),
+              BackgroungImage(),
               new Center(
                 child: Padding(
                   padding: EdgeInsets.all(25),
@@ -83,30 +82,30 @@ class _ForgotScreenState extends State<ForgotScreen> {
                         height: 76,
                         width: 106,
                       ),
-                      SizedBox(height: 105),
+                      SizedBox(height: 85),
                       Text(
                         "Forgot Password?",
                         style: TextStyle(
                             color: Colors.white,
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Noto Sans'),
                       ),
                       SizedBox(height: 15),
                       Text(
                         textAlign: TextAlign.center,
-                        "Enter your email and we'll send you \n" +
-                            "a link to reset your password",
+                        "Enter your email and we'll send you a link \n" +
+                            "to reset your password",
                         style: TextStyle(
                           color: Color.fromRGBO(118, 128, 146, 1),
-                          fontSize: 18,
+                          fontSize: 14,
                           fontWeight: FontWeight.normal,
                         ),
                       ),
-                      SizedBox(height: 30),
+                      SizedBox(height: 40),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        width: MediaQuery.of(context).size.width * 0.80,
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width * 0.85,
                         child: TextFormField(
                             cursorColor: Color.fromARGB(25, 44, 73, 1),
                             controller: _emailController,
@@ -127,11 +126,11 @@ class _ForgotScreenState extends State<ForgotScreen> {
                             )),
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 20,
                       ),
                       Container(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        width: MediaQuery.of(context).size.width * 0.80,
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width * 0.85,
                         child: TextButton(
                             style: TextButton.styleFrom(
                                 backgroundColor: Color.fromRGBO(245, 86, 0, 1),
@@ -139,6 +138,17 @@ class _ForgotScreenState extends State<ForgotScreen> {
                             onPressed: () async {
                               await EmailValidator(
                                   _emailController.text, context);
+                              ApiIntergration apiIntergration =
+                                  new ApiIntergration();
+                              apiIntergration.login(loginRequestModel =
+                                  new LoginRequestModel(
+                                      email: _emailController.text,
+                                      passowrd: '',
+                                      password: ''));
+                              // if(value!=null) {
+                              //   Navigator.of(context)
+                              //     .pushNamed('/backtologin');
+                              // }
                               //Navigator.of(context).pushNamed('/backtologin');
                               //  final action = await AlertDialogs.yesCancelDialog(context, title, 'Please enter email');
                             },

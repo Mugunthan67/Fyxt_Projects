@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'common_widget.dart';
+
 class ResetScreen extends StatefulWidget {
   const ResetScreen({Key? key}) : super(key: key);
 
@@ -15,14 +17,7 @@ class _ResetScreenState extends State<ResetScreen> {
       home: Scaffold(
         body: Stack(
           children: <Widget>[
-            new Container(
-              decoration: new BoxDecoration(
-                image: new DecorationImage(
-                  image: new ExactAssetImage("assets/images/background.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            BackgroungImage(),
             new Center(
                 child: Padding(
               padding: EdgeInsets.all(25),
